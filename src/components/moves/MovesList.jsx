@@ -1,9 +1,11 @@
 import { useGetMoves } from "../../hooks/moves/useGetMoves";
 import { useGetCategories } from "../../hooks/categories/useGetCategories";
+import { useGetAccounts } from "../../hooks/accounts/useGetAccounts";
 import { useAuth } from "../../hooks/auth/useAuth";
 import { useUpdateMove } from "../../hooks/moves/useUpdateMove";
 import { useRemoveMove } from "../../hooks/moves/useRemoveMove";
 import { useAddCategory } from "../../hooks/categories/useAddCategory";
+import { useAddAccount } from "../../hooks/accounts/useAddAccount";
 import CreatableSelect from "react-select/creatable";
 import Loader from "../Loader";
 import { Timestamp } from "@firebase/firestore";
@@ -14,9 +16,13 @@ export default function MovesList() {
   const { categories, loading: categoriesLoading } = useGetCategories(
     currentUser?.uid
   );
+  const { accounts, loading: accountsLoading } = useGetAccounts(
+    currentUser?.uid
+  );
   const { updateMove } = useUpdateMove();
   const { removeMove } = useRemoveMove();
   const { addCategory } = useAddCategory();
+  const { addAccount } = useAddAccount();
 
   const handleCategoryChange = async (moveId, selectedOption) => {
     if (!selectedOption) return;
@@ -34,7 +40,23 @@ export default function MovesList() {
     updateMove(moveId, { category: categoryId });
   };
 
-  if (loading || categoriesLoading) {
+  const handleAccountChange = async (moveId, selectedOption) => {
+    if (!selectedOption) return;
+    let accountId;
+    if (selectedOption.__isNew__) {
+      console.log("here")
+      const newCategory = await addAccount({
+        user: currentUser.uid,
+        name: selectedOption.label,
+      });
+      accountId = newCategory.id;
+    } else {
+      accountId = selectedOption.value;
+    }
+    updateMove(moveId, { account: accountId });
+  };
+
+  if (loading || categoriesLoading || accountsLoading) {
     return <Loader />;
   }
 
@@ -47,6 +69,7 @@ export default function MovesList() {
               <th>date</th>
               <th>sum</th>
               <th>category</th>
+              <th>account</th>
               <th colSpan="2">description</th>
             </tr>
           </thead>
@@ -56,6 +79,11 @@ export default function MovesList() {
                 (category) => category.id === move.category
               );
               const category = categoryById ? categoryById.name : "";
+
+              const accountById = accounts.find(
+                (account) => account.id === move.account
+              );
+              const account = accountById ? accountById.name : "";
 
               return (
                 <tr key={move.id}>
@@ -98,6 +126,30 @@ export default function MovesList() {
                       options={categories.map((category) => ({
                         value: category.id,
                         label: category.name,
+                      }))}
+                      styles={{
+                        control: (stales) => ({
+                          ...stales,
+                          border: "1px solid #ddd",
+                          borderRadius: 0,
+                        }),
+                        clearIndicator: (stales) => ({
+                          ...stales,
+                          display: "none",
+                        }),                        
+                      }}
+                    />
+                  </td>
+                  <td>
+                    <CreatableSelect
+                      isClearable
+                      value={{ value: move.account, label: account }}
+                      onChange={(selectedOption) =>
+                        handleAccountChange(move.id, selectedOption)
+                      }
+                      options={accounts.map((account) => ({
+                        value: account.id,
+                        label: account.name,
                       }))}
                       styles={{
                         control: (stales) => ({

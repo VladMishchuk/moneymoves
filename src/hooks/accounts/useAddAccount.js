@@ -2,22 +2,21 @@ import { useState } from "react";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../../config/firebase";
 
-export const useAddMove = () => {
+export const useAddAccount = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const addMove = async ({ user, date, sum, category, account, description }) => {
+  const addAccount = async ({ user, name, date, sum }) => {
     setLoading(true);
     setError(null);
     try {
-      await addDoc(collection(db, "moves"), {
+      const categoryRef = await addDoc(collection(db, "accounts"), {
         user,
+        name,
         date,
-        sum: parseFloat(sum),
-        category,
-        account,
-        description,
+        sum,
       });
+      return categoryRef;
     } catch (err) {
       setError(err.message);
     } finally {
@@ -25,5 +24,5 @@ export const useAddMove = () => {
     }
   };
 
-  return { addMove, error, loading };
+  return { addAccount, error, loading };
 };

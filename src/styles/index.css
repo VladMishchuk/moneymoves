@@ -170,7 +170,9 @@ button[type="submit"] {
 /* --------------------------------------------------------------------------------------------------------------------------------------------- */
 
 .movesTable,
-.categoriesTable {
+.categoriesTable,
+.accountsTable
+ {
   width: 100%;
   height: 100%;
   border-collapse: separate;
@@ -178,7 +180,8 @@ button[type="submit"] {
 }
 
 .movesTable-remove,
-.categoriesTable-remove {
+.categoriesTable-remove,
+.accountsTable-remove {
   height: 38px;
   padding: 6px;
   display: flex;
@@ -189,17 +192,19 @@ button[type="submit"] {
 
 .movesTable-remove-svg,
 .categoriesTable-remove-svg,
+.accountsTable-remove-svg,
 .analyticsFilter-remove-svg {
   fill: var(--color-background);
 }
 
 .movesTable-input,
-.categoriesTable-input {
+.categoriesTable-input,
+.accountsTable-input {
   margin: 0;
   height: 38px;
 }
 
-.categoriesTable-span {
+.categoriesTable-span, .accountsTable-span {
   display: flex;
   /* height: 38px; */
   padding: 8px;
@@ -220,6 +225,7 @@ button[type="submit"] {
 
 .movesTable th,
 .categoriesTable th,
+.accountsTable th,
 .balanceByCategories-table th,
 .currentBalance-table th,
 .balanceForDate-table th {

@@ -4,6 +4,7 @@ import { useAddCategory } from "../../hooks/categories/useAddCategory";
 
 export default function AddCategoryForm() {
   const [name, setCategoryName] = useState("");
+  const [project, setProject] = useState("");
   const { currentUser } = useAuth();
   const { addCategory, loading } = useAddCategory();
 
@@ -12,7 +13,11 @@ export default function AddCategoryForm() {
     await addCategory({
       user: currentUser.uid,
       name,
+      project,
     });
+
+    setCategoryName("");
+    setProject("");
   };
 
   return (
@@ -27,6 +32,18 @@ export default function AddCategoryForm() {
           required
         />
       </label>
+
+      <label>
+        <span>project:</span>
+        <input
+          placeholder="project"
+          type="text"
+          value={project}
+          onChange={(e) => setProject(e.target.value)}
+          required
+        />
+      </label>
+
       <button type="submit" disabled={loading}>
         add category
       </button>

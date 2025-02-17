@@ -1,7 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useLogout } from "../hooks/auth/useLogout";
 
-
 export default function Header() {
   const { logout } = useLogout();
   const navigate = useNavigate();
@@ -21,6 +20,12 @@ export default function Header() {
           </li>
           <li>
             <Link to="/categories">categories</Link>
+          </li>
+          <li>
+            <Link to="/accounts">accounts</Link>
+          </li>
+          <li>
+            <Link to="/projects">projects</Link>
           </li>
           <li>
             <Link to="/analytics">analytics</Link>
