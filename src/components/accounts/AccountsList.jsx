@@ -50,10 +50,10 @@ export default function AccountsList() {
                     className="accountsTable-input"
                     type="number"
                     placeholder="enter plan sum"
-                    value={account.sum}
+                    value={account.plan}
                     onChange={(e) =>
                       updateAccount(account.id, {
-                        sum: parseFloat(e.target.value) || 0,
+                        plan: parseFloat(e.target.value) || 0,
                       })
                     }
                   />

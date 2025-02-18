@@ -2,21 +2,20 @@ import { useState } from "react";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../../config/firebase";
 
-export const useAddAccount = () => {
+export const useAddProject = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const addAccount = async ({ user, name, date = null, plan = null }) => {
+  const addProject = async ({ user, name, plan = 0}) => {
     setLoading(true);
     setError(null);
     try {
-      const categoryRef = await addDoc(collection(db, "accounts"), {
+      const projectRef = await addDoc(collection(db, "projects"), {
         user,
         name,
-        date,
         plan,
       });
-      return categoryRef;
+      return projectRef;
     } catch (err) {
       setError(err.message);
     } finally {
@@ -24,5 +23,5 @@ export const useAddAccount = () => {
     }
   };
 
-  return { addAccount, error, loading };
+  return { addProject, error, loading };
 };

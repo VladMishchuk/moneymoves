@@ -8,19 +8,19 @@ export default function AddAccountForm() {
   const { currentUser } = useAuth();
   const { addAccount, loading } = useAddAccount();
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
-  const [sum, setSum] = useState("");
+  const [plan, setPlan] = useState("");
   
   const handleSubmit = async (e) => {
     e.preventDefault();
     await addAccount({
       user: currentUser.uid,
       name,
-      sum,
+      plan,
       date: Timestamp.fromDate(new Date(date)),
     });
 
     setDate(new Date().toJSON().slice(0, 10));
-    setSum("");
+    setPlan("");
     setAccountName("");
   };
 
@@ -40,11 +40,11 @@ export default function AddAccountForm() {
       <label>
         <span>plan:</span>
         <input
-          placeholder="enter expected sum"
+          placeholder="enter expected plan"
           type="number"
           step="0.01"
-          value={sum}
-          onChange={(e) => setSum(e.target.value)}
+          value={plan}
+          onChange={(e) => setPlan(e.target.value)}
         />
       </label>
 

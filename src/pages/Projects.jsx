@@ -1,5 +1,5 @@
-import AddCategoryForm from "../components/categories/AddCategoryForm";
-import CategoriesList from "../components/categories/CategoriesList";
+import AddProjectForm from "../components/projects/AddProjectForm";
+import ProjectsList from "../components/projects/ProjectsList";
 import Header from "../components/Header";
 
 export default function Projects() {
@@ -8,8 +8,8 @@ export default function Projects() {
       <Header />
       <main>
         Project
-        <AddCategoryForm />
-        <CategoriesList />
+        <AddProjectForm />
+        <ProjectsList />
       </main>
     </>
   );

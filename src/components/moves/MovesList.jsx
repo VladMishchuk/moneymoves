@@ -78,12 +78,12 @@ export default function MovesList() {
               const categoryById = categories.find(
                 (category) => category.id === move.category
               );
-              const category = categoryById ? categoryById.name : "";
+              const category = categoryById ? categoryById.name : null;
 
               const accountById = accounts.find(
                 (account) => account.id === move.account
               );
-              const account = accountById ? accountById.name : "";
+              const account = accountById ? accountById.name : null;
 
               return (
                 <tr key={move.id}>
@@ -119,6 +119,7 @@ export default function MovesList() {
                   <td>
                     <CreatableSelect
                       isClearable
+                      placeholder={<div>category</div>}
                       value={{ value: move.category, label: category }}
                       onChange={(selectedOption) =>
                         handleCategoryChange(move.id, selectedOption)

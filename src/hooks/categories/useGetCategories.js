@@ -9,7 +9,12 @@ import {
 } from "firebase/firestore";
 import { db } from "../../config/firebase";
 
-export function useGetCategories(userId, addBalance = false) {
+export function useGetCategories(
+  userId,
+  addSum = false,
+  dateFrom = null,
+  dateTo = null
+) {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -19,8 +24,12 @@ export function useGetCategories(userId, addBalance = false) {
 
     setLoading(true);
     setError(null);
-    
-    const q = query(collection(db, "categories"), where("user", "==", userId), orderBy("name"));
+
+    const q = query(
+      collection(db, "categories"),
+      where("user", "==", userId),
+      orderBy("name")
+    );
     const unsubscribe = onSnapshot(
       q,
       async (snapshot) => {
@@ -31,18 +40,23 @@ export function useGetCategories(userId, addBalance = false) {
               ...doc.data(),
             };
 
-            if (addBalance) {
-              const movesSnapshot = await getDocs(query(
-                collection(db, "moves"),
-                where("user", "==", userId),
-                where("category", "==", categoryData.id)
-              ));
-              const balance = movesSnapshot.docs.reduce((sum, moveDoc) => {
-                const { sum: moveSum } = moveDoc.data();
-                return sum + (moveSum || 0);
-              }, 0);
+            if (addSum && dateFrom && dateTo) {
+              const movesSnapshot = await getDocs(
+                query(
+                  collection(db, "moves"),
+                  where("user", "==", userId),
+                  where("date", ">=", dateFrom),
+                  where("date", "<=", dateTo),
+                  where("category", "==", categoryData.id)
+                )
+              );
+              let sum = 0;
+              movesSnapshot.forEach((move) => {
+                const { sum: sumFromMove } = move.data();
+                sum += sumFromMove;
+              });
 
-              return { ...categoryData, balance };
+              return { ...categoryData, sum };
             } else {
               return categoryData;
             }
@@ -60,7 +74,7 @@ export function useGetCategories(userId, addBalance = false) {
     );
 
     return () => unsubscribe();
-  }, [userId, addBalance]);
+  }, [userId, addSum]);
 
   return { categories, loading, error };
 }

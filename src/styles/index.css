@@ -42,7 +42,7 @@ header h1 {
 h2 {
   font-size: var(--font-size-medium);
   margin-top: 1.3rem;
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
 }
 
 header nav ul {
@@ -99,12 +99,13 @@ form span {
 
 .balanceByCategories-form-select,
 .warning-period {
-  grid-column: 1 / 3; 
+  grid-column: 1 / 3;
 }
 
-.balanceByCategories-form-filter, .flex-container {
+.balanceByCategories-form-filter,
+.flex-container {
   grid-column: 1 / 3;
-  display: flex; 
+  display: flex;
   flex-wrap: wrap;
   gap: 0.2rem;
 }
@@ -171,8 +172,8 @@ button[type="submit"] {
 
 .movesTable,
 .categoriesTable,
-.accountsTable
- {
+.accountsTable,
+.projectsTable {
   width: 100%;
   height: 100%;
   border-collapse: separate;
@@ -181,7 +182,8 @@ button[type="submit"] {
 
 .movesTable-remove,
 .categoriesTable-remove,
-.accountsTable-remove {
+.accountsTable-remove,
+.progectsTable-remove {
   height: 38px;
   padding: 6px;
   display: flex;
@@ -193,18 +195,22 @@ button[type="submit"] {
 .movesTable-remove-svg,
 .categoriesTable-remove-svg,
 .accountsTable-remove-svg,
+.projectsTable-remove-svg,
 .analyticsFilter-remove-svg {
   fill: var(--color-background);
 }
 
 .movesTable-input,
 .categoriesTable-input,
+.projectsTable-input,
 .accountsTable-input {
   margin: 0;
   height: 38px;
 }
 
-.categoriesTable-span, .accountsTable-span {
+.categoriesTable-span,
+.accountsTable-span,
+.projectsTable-span {
   display: flex;
   /* height: 38px; */
   padding: 8px;
@@ -217,7 +223,7 @@ button[type="submit"] {
 .balanceByCategories-table,
 .currentBalance-table,
 .balanceForDate-table {
-  width: 100%; 
+  width: 100%;
   border-collapse: separate;
   border-spacing: 3px;
   text-align: center;
@@ -226,6 +232,7 @@ button[type="submit"] {
 .movesTable th,
 .categoriesTable th,
 .accountsTable th,
+.projectsTable th,
 .balanceByCategories-table th,
 .currentBalance-table th,
 .balanceForDate-table th {
@@ -236,14 +243,15 @@ button[type="submit"] {
 
 .balanceByCategories-table td,
 .currentBalance-table td,
-.balanceForDate-table td { 
+.balanceForDate-table td {
   background-color: var(--color-white);
   padding: 8px 0;
 }
 
 /* --------------------------------------------------------------------------------------------------------------------------------------------- */
 
-.error, .warning-period {
+.error,
+.warning-period {
   color: rgb(185, 0, 0);
   font-size: var(--font-size-small);
 }

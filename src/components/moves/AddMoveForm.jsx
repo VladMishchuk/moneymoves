@@ -11,8 +11,8 @@ import { Timestamp } from "@firebase/firestore";
 export default function AddMoveForm() {
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [sum, setSum] = useState("");
-  const [category, setCategory] = useState();
-  const [account, setAccount] = useState();
+  const [category, setCategory] = useState(null);
+  const [account, setAccount] = useState(null);
   const [description, setDescription] = useState("");
   const { currentUser } = useAuth();
   const { addMove, loading } = useAddMove();
@@ -94,8 +94,8 @@ export default function AddMoveForm() {
 
     setDate(new Date().toJSON().slice(0, 10));
     setSum("");
-    setCategory({});
-    setAccount({});
+    setCategory(null);
+    setAccount(null);
     setDescription("");
   };
 
