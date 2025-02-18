@@ -7,7 +7,6 @@ export default function Projects() {
     <>
       <Header />
       <main>
-        Project
         <AddProjectForm />
         <ProjectsList />
       </main>

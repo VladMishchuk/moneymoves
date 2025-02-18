@@ -21,6 +21,7 @@ export default function ProjectsList() {
           <thead>
             <tr>
               <th>project</th>
+              <th>sum</th>
               <th>plan</th>
               <th></th>
             </tr>
@@ -39,7 +40,10 @@ export default function ProjectsList() {
                     }
                   />
                 </td>
-                <td> 
+                <td>
+                  <span className="categoriesTable-span">{project.sum}</span>
+                </td>
+                <td>
                   <input
                     className="projectsTable-input"
                     type="number"
