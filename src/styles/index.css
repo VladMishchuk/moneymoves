@@ -91,6 +91,8 @@ form span {
 }
 
 .balanceByCategories-form,
+.projectsTable-form,
+.categoriesTable-form,
 .movesForPeriod-form {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -170,10 +172,12 @@ button[type="submit"] {
 
 /* --------------------------------------------------------------------------------------------------------------------------------------------- */
 
+table {
+  box-sizing: content-box;
+}
+
 .movesTable,
-.categoriesTable,
-.accountsTable,
-.projectsTable {
+.accountsTable {
   width: 100%;
   height: 100%;
   border-collapse: separate;
@@ -220,6 +224,13 @@ button[type="submit"] {
 }
 /* --------------------------------------------------------------------------------------------------------------------------------------------- */
 
+.categoriesTable-container,
+.projectsTable-container {
+  width: 100%;
+}
+
+.categoriesTable,
+.projectsTable,
 .balanceByCategories-table,
 .currentBalance-table,
 .balanceForDate-table {

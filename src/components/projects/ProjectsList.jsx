@@ -3,20 +3,76 @@ import { useAuth } from "../../hooks/auth/useAuth";
 import { useUpdateProject } from "../../hooks/projects/useUpdateProject";
 import { useRemoveProject } from "../../hooks/projects/useRemoveProject";
 import Loader from "../Loader";
+import { Timestamp } from "@firebase/firestore";
+import moment from "moment";
+import { useState } from "react";
+import { useGetCategories } from "../../hooks/categories/useGetCategories";
 
 export default function ProjectsList() {
   const { currentUser } = useAuth();
   const { projects, loading } = useGetProjects(currentUser?.uid);
   const { updateProject } = useUpdateProject();
   const { removeProject } = useRemoveProject();
+  const [periodStart, setPeriodStart] = useState(
+    Timestamp.fromDate(new Date(moment().startOf("month").format("YYYY-MM-DD")))
+  );
+  const [periodEnd, setPeriodEnd] = useState(
+    Timestamp.fromDate(new Date(moment().endOf("month").format("YYYY-MM-DD")))
+  );
+  const { categories, loading: categoriesLoading } = useGetCategories(
+    currentUser?.uid,
+    true,
+    periodStart,
+    periodEnd
+  );
 
-  if (loading) {
-    return <Loader />;
-  }
+  const getSumPerPeriodByProject = (id) => {
+    let sum = 0;
+    categories?.forEach((category) =>
+      category.project == id ? (sum += category.sum) : sum
+    );
+    return sum;
+  };
 
   return (
-    <>
-      {projects.length > 0 ? (
+    <div className="projectsTable-container">
+      <form className="projectsTable-form">
+        {periodStart >= periodEnd ? (
+          <p className="warning-period">check the first period</p>
+        ) : (
+          ""
+        )}
+        <label>
+          <span>from:</span>
+          <input
+            type="date"
+            value={
+              new Date(periodStart.seconds * 1000).toISOString().split("T")[0]
+            }
+            onChange={(e) =>
+              setPeriodStart(Timestamp.fromDate(new Date(e.target.value)))
+            }
+            required
+          />
+        </label>
+        <label>
+          <span>to:</span>
+          <input
+            type="date"
+            value={
+              new Date(periodEnd.seconds * 1000).toISOString().split("T")[0]
+            }
+            onChange={(e) =>
+              setPeriodEnd(Timestamp.fromDate(new Date(e.target.value)))
+            }
+            required
+          />
+        </label>
+      </form>
+
+      {loading || categoriesLoading ? (
+        <Loader />
+      ) : projects.length > 0 ? (
         <table className="projectsTable">
           <thead>
             <tr>
@@ -41,7 +97,9 @@ export default function ProjectsList() {
                   />
                 </td>
                 <td>
-                  <span className="categoriesTable-span">{project.sum}</span>
+                  <span className="categoriesTable-span">
+                    {getSumPerPeriodByProject(project.id)}
+                  </span>
                 </td>
                 <td>
                   <input
@@ -80,6 +138,6 @@ export default function ProjectsList() {
       ) : (
         <p>No projects</p>
       )}
-    </>
+    </div>
   );
 }

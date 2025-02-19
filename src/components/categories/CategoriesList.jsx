@@ -1,15 +1,29 @@
 import { useGetCategories } from "../../hooks/categories/useGetCategories";
 import { useGetProjects } from "../../hooks/projects/useGetProjects";
 import { useAddProject } from "../../hooks/projects/useAddProject";
-import { useAuth } from "../../hooks/auth/useAuth";
 import { useUpdateCategory } from "../../hooks/categories/useUpdateCategory";
 import { useRemoveCategory } from "../../hooks/categories/useRemoveCategory";
+import { useAuth } from "../../hooks/auth/useAuth";
+import { Timestamp } from "@firebase/firestore";
+import moment from "moment";
+import { useState } from "react";
 import Loader from "../Loader";
 import CreatableSelect from "react-select/creatable";
 
 export default function CategoriesList() {
   const { currentUser } = useAuth();
-  const { categories, loading } = useGetCategories(currentUser?.uid, true);
+  const [periodStart, setPeriodStart] = useState(
+    Timestamp.fromDate(new Date(moment().startOf("month").format("YYYY-MM-DD")))
+  );
+  const [periodEnd, setPeriodEnd] = useState(
+    Timestamp.fromDate(new Date(moment().endOf("month").format("YYYY-MM-DD")))
+  );
+  const { categories, loading } = useGetCategories(
+    currentUser?.uid,
+    true,
+    periodStart,
+    periodEnd
+  );
   const { updateCategory } = useUpdateCategory();
   const { removeCategory } = useRemoveCategory();
   const { projects, loading: projectsLoading } = useGetProjects(
@@ -33,13 +47,45 @@ export default function CategoriesList() {
     updateCategory(categoryId, { project: projectId });
   };
 
-  if (loading || projectsLoading) {
-    return <Loader />;
-  }
-
   return (
-    <>
-      {categories.length > 0 ? (
+    <div className="categoriesTable-container">
+      <form className="categoriesTable-form">
+        {periodStart >= periodEnd ? (
+          <p className="warning-period">check the first period</p>
+        ) : (
+          ""
+        )}
+        <label>
+          <span>from:</span>
+          <input
+            type="date"
+            value={
+              new Date(periodStart.seconds * 1000).toISOString().split("T")[0]
+            }
+            onChange={(e) =>
+              setPeriodStart(Timestamp.fromDate(new Date(e.target.value)))
+            }
+            required
+          />
+        </label>
+        <label>
+          <span>to:</span>
+          <input
+            type="date"
+            value={
+              new Date(periodEnd.seconds * 1000).toISOString().split("T")[0]
+            }
+            onChange={(e) =>
+              setPeriodEnd(Timestamp.fromDate(new Date(e.target.value)))
+            }
+            required
+          />
+        </label>
+      </form>
+
+      {loading || projectsLoading ? (
+        <Loader />
+      ) : categories.length > 0 ? (
         <table className="categoriesTable">
           <thead>
             <tr>
@@ -98,19 +144,19 @@ export default function CategoriesList() {
                       }}
                     />
                   </td>
-                  <td> 
-                  <input
-                    className="accountsTable-input"
-                    type="number"
-                    placeholder="enter plan sum"
-                    value={category.plan}
-                    onChange={(e) =>
-                      updateCategory(category.id, {
-                        plan: parseFloat(e.target.value) || 0,
-                      })
-                    }
-                  />
-                </td>
+                  <td>
+                    <input
+                      className="accountsTable-input"
+                      type="number"
+                      placeholder="enter plan sum"
+                      value={category.plan}
+                      onChange={(e) =>
+                        updateCategory(category.id, {
+                          plan: parseFloat(e.target.value) || 0,
+                        })
+                      }
+                    />
+                  </td>
                   <td>
                     <button
                       className="categoriesTable-remove"
@@ -136,6 +182,6 @@ export default function CategoriesList() {
       ) : (
         <p>No categories</p>
       )}
-    </>
+    </div>
   );
 }

@@ -12,8 +12,8 @@ import { db } from "../../config/firebase";
 export function useGetCategories(
   userId,
   addSum = false,
-  dateFrom = null,
-  dateTo = null
+  periodStart = null,
+  periodEnd = null
 ) {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -40,13 +40,13 @@ export function useGetCategories(
               ...doc.data(),
             };
 
-            if (addSum && dateFrom && dateTo) {
+            if (addSum && periodStart && periodEnd && (periodStart <= periodEnd)) {
               const movesSnapshot = await getDocs(
                 query(
                   collection(db, "moves"),
                   where("user", "==", userId),
-                  where("date", ">=", dateFrom),
-                  where("date", "<=", dateTo),
+                  where("date", ">=", periodStart),
+                  where("date", "<=", periodEnd),
                   where("category", "==", categoryData.id)
                 )
               );
@@ -74,7 +74,7 @@ export function useGetCategories(
     );
 
     return () => unsubscribe();
-  }, [userId, addSum]);
+  }, [userId, addSum, periodStart, periodEnd]);
 
   return { categories, loading, error };
 }
