@@ -224,6 +224,15 @@ table {
 }
 /* --------------------------------------------------------------------------------------------------------------------------------------------- */
 
+.projectChats-container {
+  display: flex;
+  gap: 1rem;
+}
+
+.projectChat {
+  flex: 1;
+}
+
 .categoriesTable-container,
 .projectsTable-container {
   width: 100%;
